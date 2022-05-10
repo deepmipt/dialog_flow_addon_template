@@ -5,7 +5,6 @@ import os
 import shutil
 import subprocess
 
-from termcolor import cprint, colored
 from pathlib import Path
 
 CONDITIONAL_MANIFEST = "conditional_files.json"
@@ -24,23 +23,16 @@ def delete_resources_for_disabled_features():
         manifest = json.load(manifest_file)
         for feature_name, feature in manifest.items():
             if feature["enabled"].lower() != "true":
-                text = "{} resources for disabled feature {}...".format(
-                    colored("Removing", color="red"),
-                    colored(feature_name, color="magenta", attrs=["underline"]),
-                )
+                text = "Removing resources for disabled feature feature_nam..."
                 print(text)
                 for resource in feature["resources"]:
                     delete_resource(resource)
     delete_resource(CONDITIONAL_MANIFEST)
-    cprint("cleanup complete!", color="green")
+    print("cleanup complete!")
 
 
 def replace_resources():
-    print(
-        "⭐ Placing {} nicely in your {} ⭐".format(
-            colored("resources", color="green"), colored("new project", color="blue")
-        )
-    )
+    print("⭐ Placing resources nicely in your new project ⭐")
     with open(REPLACE_MANIFEST) as replace_manifest:
         manifest = json.load(replace_manifest)
         for target, replaces in manifest.items():
@@ -50,18 +42,14 @@ def replace_resources():
                 if src_file.exists():
                     shutil.move(src_file, target_path)
     delete_resource(REPLACE_MANIFEST)
-    print(
-        "Resources are happy to be where {}.".format(
-            colored("they are needed the most", color="green", attrs=["underline"])
-        )
-    )
+    print("Resources are happy to be where they are needed the most.")
 
 
 def init_repo():
     subprocess.run(["git", "init"], stdout=subprocess.PIPE)
-    cprint("Git repository initialized.", "green")
+    print("Git repository initialized.")
     subprocess.run(["git", "add", "."], stdout=subprocess.PIPE)
-    cprint("Added files to index.", "green")
+    print("Added files to index.")
     subprocess.run(["git", "commit", "-m", "Initial commit"], stdout=subprocess.PIPE)
 
 
